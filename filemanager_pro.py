@@ -1,3 +1,22 @@
+"""A (fake) file manager for professional use.
+
+While playing with menus and workers for background tasks I needed a
+confirmation dialog. Returning data from modal screens involves callbacks which
+require you to push a screen, wrap up your task and pick it up inside a
+callback. This broke my brain because maybe I'm in a long-running task and need
+to ask for confirmation repeatedly, as in copying a batch of files of which
+multiple files may already exist at the destination. How do I wrap up, and pick
+up the work in a new callback repeatedly? I'm looking for a nice, elegant
+solution which fits the callback / asyncio nature of Textual.
+
+This is not that solution. It is, however, _a_ solution. I opted for writing
+something that _does_ fit my brain which involves synchronisation primitives.
+
+To make the example interesting, the code is not as small as I would have liked.
+The interesting things happen in the worker CopyDialog.copy_files and the
+confirmation dialog handler CopyDialog.ask_overwrite_confirmation.
+"""
+
 import enum
 import itertools
 import random
@@ -206,5 +225,7 @@ class FileManagerPro(App):
 
 
 if __name__ == "__main__":
+    Faker.seed(2)
+    random.seed(1)
     app = FileManagerPro()
     app.run()
