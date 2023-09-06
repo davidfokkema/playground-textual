@@ -50,7 +50,7 @@ def generate_file_names() -> Iterator[Path]:
 
 
 class FileReplaceDialog(ModalScreen):
-    def __init__(self, file) -> None:
+    def __init__(self, file: Path) -> None:
         super().__init__()
         self.file = file
 
@@ -98,7 +98,7 @@ class CopyDialog(ModalScreen):
     def start_worker(self) -> None:
         self.worker = self.copy_files()
 
-    def watch_current_file(self, file: str) -> None:
+    def watch_current_file(self, file: Path) -> None:
         if not file:
             copy_msg = "Preparing files..."
         else:
@@ -138,7 +138,7 @@ class CopyDialog(ModalScreen):
         # simulate copy
         time.sleep(min(random.expovariate(1.0 / 0.2), 1.0))
 
-    def ask_overwrite_confirmation(self, file) -> FileReplaceChoice:
+    def ask_overwrite_confirmation(self, file: Path) -> FileReplaceChoice:
         confirmation = Condition()
         choice = None
 
