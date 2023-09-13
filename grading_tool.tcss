@@ -1,0 +1,59 @@
+Assignment>Label,
+Student>Label,
+Task>Label {
+    padding: 1;
+    width: 100%;
+    text-align: center;
+}
+
+#list_header {
+    width: 100%;
+    padding-bottom: 2;
+    text-align: center;
+    text-style: bold;
+}
+
+#breadcrumbs {
+    align: right top;
+    height: auto;
+    margin-bottom: 1;
+}
+
+#breadcrumbs>Label {
+    margin: 0 1;
+    text-style: italic;
+}
+
+#breadcrumbs>#spacer {
+    width: 1fr;
+}
+
+#back {
+    border: none;
+    width: auto;
+    min-width: 0;
+    height: auto;
+    padding: 0;
+    margin: 0;
+}
+
+RunTaskModal,
+TaskErrorModal {
+    align: center middle;
+}
+
+#modal_dialog {
+    height: auto;
+    width: 40%;
+    border: hkey $secondary;
+    background: $panel;
+}
+
+#modal_dialog Button {
+    margin-top: 1;
+}
+
+#modal_dialog LoadingIndicator {
+    margin-top: 1;
+    height: auto;
+}
