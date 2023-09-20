@@ -17,6 +17,7 @@ The interesting things happen in the worker CopyDialog.copy_files and the
 confirmation dialog handler CopyDialog.ask_overwrite_confirmation.
 """
 
+import asyncio
 import enum
 import itertools
 import random
@@ -123,7 +124,7 @@ class CopyDialog(ModalScreen):
             self.current_file = file
             if random.random() < 0.05:
                 # some files already exist
-                match self.ask_overwrite_confirmation(file):
+                match self.app.call_from_thread(self.ask_overwrite_confirmation, file):
                     case FileReplaceChoice.CANCEL:
                         self.cancel.set()
                     case FileReplaceChoice.REPLACE:
@@ -138,23 +139,17 @@ class CopyDialog(ModalScreen):
         # simulate copy
         time.sleep(min(random.expovariate(1.0 / 0.2), 1.0))
 
-    def ask_overwrite_confirmation(self, file: Path) -> FileReplaceChoice:
-        confirmation = Condition()
-        choice = None
-
+    async def ask_overwrite_confirmation(self, file: Path) -> FileReplaceChoice:
         def callback(value: FileReplaceChoice) -> None:
-            nonlocal choice
-            with confirmation:
-                choice = value
-                confirmation.notify()
+            future_choice.set_result(value)
 
-        self.app.call_from_thread(
-            self.app.push_screen, FileReplaceDialog(file), callback
-        )
+        self.log("Asking for confirmation...")
+        loop = asyncio.get_running_loop()
+        future_choice = loop.create_future()
 
-        with confirmation:
-            confirmation.wait()
-            return choice
+        self.app.push_screen(FileReplaceDialog(file), callback)
+
+        return await future_choice
 
     def on_worker_state_changed(self, event: Worker.StateChanged) -> None:
         if event.state in (
