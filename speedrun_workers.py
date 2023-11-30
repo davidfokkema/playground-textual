@@ -46,7 +46,9 @@ class SpeedRunApp(App[None]):
 
     @on(Button.Pressed, "#speedrun")
     def execute(self):
-        task = self.query_one("#task0")
+        # task = self.query_one("#task0")
+        task = TaskButton("Speedrun")
+        self.mount(task)
         task.loading = True
         task.run_task()
 
