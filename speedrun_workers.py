@@ -57,8 +57,15 @@ class SpeedRunApp(App[None]):
 
     @on(Button.Pressed, "#speedrun")
     def speedrun(self) -> None:
-        task = TaskButton("Task 0")
-        task.execute()
+        # def execute(self):
+        task = TaskButton("Task All")
+        task._task_screen = TaskDialog(task.label)
+        task.app.push_screen(task._task_screen)
+        task.run_task()
+
+        # task = TaskButton("Task 0")
+        # task.run_task()
+        # print("YEAH")
 
 
 app = SpeedRunApp()
