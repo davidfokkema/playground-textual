@@ -16,7 +16,9 @@ class MyTask(ModalScreen):
 
     @on(Button.Pressed)
     def close(self, event: Button.Pressed) -> None:
-        self.dismiss(True)
+        # bug: if you do not return a value, await push_screen will hang and
+        # subsequent tasks will not be performed in speedrun
+        self.dismiss()
 
     @on(ScreenResume)
     def resume(self) -> None:
@@ -72,11 +74,13 @@ class SpeedRunApp(App[None]):
 
     @work()
     async def speedrun(self):
+        print("Starting tasks...")
         for i in range(3):
             print(f"Running task {i}")
             task = MyTask()
             await self.push_screen(task, wait_for_dismiss=True)
             print(f"Finished task {i}")
+        print("All tasks done!")
 
 
 app = SpeedRunApp()
