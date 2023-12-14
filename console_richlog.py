@@ -1,3 +1,14 @@
+"""A test with RichLog.
+
+This example shows capturing output from a console script which runs using the
+subprocess module, in a threaded worker. The problem it hasn't solved is that in
+a terminal, three progressbars are displayed at the bottom of the screen while
+text is occassionally printed above it the progress bars, while in RichLog, each
+screen update writes three new lines to the log. The result is that the log is
+flooded with hundreds of lines of progress bars slowly building up to
+completion.
+"""
+
 import subprocess
 
 from rich.text import Text
@@ -10,15 +21,10 @@ class MyLog(RichLog):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.border_title = "Console"
-        self.clear_next_line = False
+        self.auto_scroll = True
 
     def mywrite(self, text: Text):
-        if self.clear_next_line:
-            del self.lines[-1]
-            self.clear_next_line = False
-        self.write(repr(text))
-        if text.plain and text.plain[-1] == "\n":
-            self.clear_next_line = True
+        self.write(text)
 
 
 class ConsoleApp(App):
