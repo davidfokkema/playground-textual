@@ -1,6 +1,6 @@
 from textual import on
 from textual.app import App, ComposeResult
-from textual.containers import Center, Horizontal
+from textual.containers import Horizontal
 from textual.widgets import Button, RichLog
 
 
@@ -11,20 +11,16 @@ class LoggingApp(App[None]):
             align: center top;
         }
 
-        Button {
+        Button, RichLog {
             margin: 1 2;
-        }
-
-        RichLog {
-            padding: 1 2;
         }
     """
 
     def compose(self) -> ComposeResult:
         with Horizontal():
             yield Button("Green", id="green", variant="primary")
-            yield Button("Red", id="red")
-            yield Button("Blue", id="blue")
+            yield Button("Red", id="red", variant="primary")
+            yield Button("Blue", id="blue", variant="primary")
         yield RichLog(markup=True)
 
     @on(Button.Pressed)
