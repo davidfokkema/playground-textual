@@ -7,7 +7,7 @@ TEXT = "A quick brown [dark_goldenrod]fox[/] jumps over the lazy dog."
 STEP = 2
 
 
-class MyLabel(Label):
+class TruncatedLabel(Label):
     def __init__(self, label: str, *args, **kwargs) -> None:
         super().__init__(label, *args, **kwargs)
         self.label = label
@@ -37,7 +37,7 @@ class SmallLabelApp(App[None]):
                     (label := Label(TEXT)).styles.width = width
                     yield label
                 with Container():
-                    (label := MyLabel(TEXT)).styles.width = width
+                    (label := TruncatedLabel(TEXT)).styles.width = width
                     yield label
 
 
