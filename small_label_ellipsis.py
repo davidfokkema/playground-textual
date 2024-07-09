@@ -1,10 +1,9 @@
 from rich.text import Text
-from textual import on
 from textual.app import App, ComposeResult, RenderResult
-from textual.events import Resize
-from textual.widgets import Label, Static
+from textual.containers import Container, Horizontal
+from textual.widgets import Label
 
-TEXT = "A quick brown fox jumps over the lazy dog."
+TEXT = "A quick brown [dark_goldenrod]fox[/] jumps over the lazy dog."
 STEP = 2
 
 
@@ -14,14 +13,18 @@ class MyLabel(Label):
         self.label = label
 
     def render(self) -> RenderResult:
-        text = Text(self.label)
+        text = Text.from_markup(self.label)
         text.truncate(self.size.width, overflow="ellipsis")
         return text
 
 
 class SmallLabelApp(App[None]):
     CSS = """
-        MyLabel {
+        Horizontal, Container {
+            height: auto;
+        }
+
+        Label, MyLabel {
             height: 3;
             border: solid $primary;
         }
@@ -29,8 +32,13 @@ class SmallLabelApp(App[None]):
 
     def compose(self) -> ComposeResult:
         for width in range(STEP, len(TEXT) + STEP + 2, STEP):
-            (label := MyLabel(TEXT)).styles.width = width
-            yield label
+            with Horizontal():
+                with Container():
+                    (label := Label(TEXT)).styles.width = width
+                    yield label
+                with Container():
+                    (label := MyLabel(TEXT)).styles.width = width
+                    yield label
 
 
 SmallLabelApp().run()
