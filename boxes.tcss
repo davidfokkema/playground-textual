@@ -1,0 +1,30 @@
+Horizontal {
+    border: solid $primary;
+    align: center middle;
+}
+
+Container {
+    height: auto;
+    width: auto;
+}
+
+#spacing {
+    width: 10;
+}
+
+#box1 {
+    border: solid $secondary;
+
+    & Label {
+        border: solid $secondary;
+    }
+}
+
+#box2 {
+    border: wide $secondary;
+
+    & Label {
+        border: solid $secondary;
+        padding: 0 2;
+    }
+}
