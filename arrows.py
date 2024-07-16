@@ -10,6 +10,7 @@ class ArrowApp(App[None]):
         
         Label {
             margin: 1 0;
+            border: solid;
         }
     """
 
@@ -19,6 +20,7 @@ class ArrowApp(App[None]):
         yield Label("⎯⎯⎯⎯→")
         yield Label("      ╲\n▔▔▔▔▔▔╱")
         yield Label("⎯⎯⎯⎯▶︎")
+        yield Label("▶︎")
         yield Label("───────▶︎")
 
 
