@@ -8,10 +8,17 @@ from textual.widgets.option_list import Option
 
 
 class OptionListAPIApp(App[None]):
+    CSS = """
+        OptionList {
+            min-height: 3;
+        }
+    """
+
     def compose(self) -> ComposeResult:
         yield OptionList()
 
     def on_mount(self) -> None:
+        # self.dark = False
         option_list = self.query_one(OptionList)
         option_list.loading = True
         self.load_data(option_list)
