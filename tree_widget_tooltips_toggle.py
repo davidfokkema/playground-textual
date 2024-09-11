@@ -32,7 +32,6 @@ class TreeScreen(Screen):
     """
     BINDINGS = [("t", "toggle_tooltips", "Toggle Tooltips")]
 
-    _show_tooltips = True
     DEFAULT_CLASSES = "show_tooltips"
 
     def compose(self) -> ComposeResult:
@@ -48,12 +47,10 @@ class TreeScreen(Screen):
             characters.add_leaf(name, data=description)
 
     def action_toggle_tooltips(self) -> None:
-        self._show_tooltips = not self._show_tooltips
-        if self._show_tooltips:
-            self.add_class("show_tooltips")
+        self.toggle_class("show_tooltips")
+        if self.has_class("show_tooltips"):
             self.notify("Showing tooltips")
         else:
-            self.remove_class("show_tooltips")
             self.notify("Tooltips disabled")
 
 
