@@ -8,6 +8,10 @@ class RadioApp(App[None]):
         .error {
             border: tall $error;
         }
+
+        RadioButton.-on > .toggle--label {
+            color: $success;
+        }
     """
 
     def compose(self) -> ComposeResult:
