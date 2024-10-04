@@ -15,10 +15,11 @@ from typing import Any
 
 from textual import work
 from textual.app import App, ComposeResult
+from textual.containers import Horizontal
 from textual.coordinate import Coordinate
 from textual.geometry import Offset, Region
 from textual.screen import ModalScreen
-from textual.widgets import DataTable, Footer, Input
+from textual.widgets import DataTable, Footer, Input, OptionList
 
 ROWS = [
     ("lane", "swimmer", "country", "time"),
@@ -79,7 +80,7 @@ class EditWidgetScreen(ModalScreen):
             self.widget_region.width
             + input.styles.padding.left
             + input.styles.padding.right
-            # include the borders _and_ the cursus at the end of the line
+            # include the borders _and_ the cursor at the end of the line
             + 3
         )
         input.styles.height = (
@@ -126,9 +127,11 @@ class EditableDataTable(DataTable):
             region.width - 2 * self.cell_padding,
             region.height,
         )
+        absolute_offset = self.screen.get_offset(self)
+        absolute_region = contents_region.translate(absolute_offset)
 
         new_value = await self.app.push_screen_wait(
-            EditWidgetScreen(value=self.get_cell_at(coordinate), region=contents_region)
+            EditWidgetScreen(value=self.get_cell_at(coordinate), region=absolute_region)
         )
         if new_value is not None:
             self.update_cell_at(coordinate, new_value, update_width=True)
@@ -137,7 +140,9 @@ class EditableDataTable(DataTable):
 class TableApp(App):
     def compose(self) -> ComposeResult:
         yield Footer()
-        yield EditableDataTable()
+        with Horizontal():
+            yield OptionList("One", "Two", "Three")
+            yield EditableDataTable()
 
     def on_mount(self) -> None:
         table = self.query_one(EditableDataTable)
