@@ -25,14 +25,8 @@ class TableApp(App):
         table.add_columns(*ROWS[0])
         table.add_rows(ROWS[1:])
 
-    def on_data_table_cell_highlighted(self) -> None:
-        table = self.query_one(DataTable)
-        cell_key = table.coordinate_to_cell_key(table.cursor_coordinate)
-        row_key = cell_key.row_key
-        column_key = cell_key.column_key
-        cell_value = table.get_cell(row_key, column_key)
-
-        self.query_one(Label).update(f"[bold red]Cell value at cursor: {cell_value}")
+    def on_data_table_cell_highlighted(self, event: DataTable.CellHighlighted) -> None:
+        self.query_one(Label).update(f"[bold red]Cell value at cursor: {event.value}")
 
 
 app = TableApp()
