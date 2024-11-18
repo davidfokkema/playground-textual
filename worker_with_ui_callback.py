@@ -164,11 +164,15 @@ class MyApp(App[None]):
     def log_new_transaction(self, transaction) -> None:
         """Log a new transaction.
 
+        This method expects to be called from a threaded worker, so has to use
+        `call_from_thread()` to call methods on the DataTable widget.
+
         Args:
             transaction (tuple): the transaction to record in the data table.
         """
-        (table := self.query_one(DataTable)).add_row(*transaction)
-        table.action_scroll_bottom()
+        table = self.query_one(DataTable)
+        self.call_from_thread(table.add_row, *transaction)
+        self.call_from_thread(table.action_scroll_bottom)
 
     def ask_for_input(self, prompt: str) -> str:
         """Aks the user for input and return the response.
