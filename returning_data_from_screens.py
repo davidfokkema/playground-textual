@@ -118,8 +118,6 @@ class Dashboard(Screen):
 
 
 class AppWithLogin(App[None]):
-    CSS_PATH = "tmp.tcss"
-
     def on_mount(self) -> None:
         # show how to use a handler for returning data from screens
         def login_handler(return_values):
