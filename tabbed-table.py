@@ -1,50 +1,31 @@
 from textual.app import App, ComposeResult
-from textual.widgets import DataTable, Markdown, TabbedContent, TabPane
-
-ROWS = [
-    ("lane", "swimmer", "country", "time"),
-    (4, "Joseph Schooling", "Singapore", 50.39),
-    (2, "Michael Phelps", "United States", 51.14),
-    (5, "Chad le Clos", "South Africa", 51.14),
-    (6, "László Cseh", "Hungary", 51.14),
-    (3, "Li Zhuhao", "China", 51.26),
-    (8, "Mehdy Metella", "France", 51.58),
-    (7, "Tom Shields", "United States", 51.73),
-    (1, "Aleksandr Sadovnikov", "Russia", 51.84),
-    (10, "Darren Burns", "Scotland", 51.84),
-]
+from textual.widgets import Button, DataTable, Footer, Static, TabbedContent, TabPane
 
 
-PAUL = """
-# Paul Atreides
-
-Son of Leto and Jessica.
-"""
-
-
-class App(App):
+class TabbedTableApp(App):
+    BINDINGS = [
+        ("1", "switch_tab('tab1')", "Switch to Tab 1"),
+        ("2", "switch_tab('tab2')", "Switch to Tab 2"),
+    ]
     CSS = """
         DataTable {
-            height: 1fr;
-            border: solid red;
+            height: 1fr; # comment out this line and it works fine
         }
     """
 
     def compose(self) -> ComposeResult:
-        # Add the TabbedContent widget
-        with TabbedContent(initial="rows"):
-            with TabPane("Rows", id="rows"):  # First tab
-                yield DataTable()  # Tab content
+        yield Footer()
+        with TabbedContent(initial="tab1"):
+            with TabPane("Tab 1", id="tab1"):
+                yield DataTable()  # comment out this line and it works fine
+                yield Button("Switch")  # comment out this line and it works fine
+            with TabPane("Tab 2", id="tab2"):
+                yield Static("Hi there")
 
-            with TabPane("Paul", id="paul"):
-                yield Markdown(PAUL)
-
-    def on_mount(self) -> None:
-        table = self.query_one(DataTable)
-        table.add_columns(*ROWS[0])
-        table.add_rows(ROWS[1:])
+    def action_switch_tab(self, tab_id: str) -> None:
+        self.query_one(TabbedContent).active = tab_id
 
 
 if __name__ == "__main__":
-    app = App()
+    app = TabbedTableApp()
     app.run()
